@@ -21,11 +21,14 @@ def get_todo(item_id):
     else:
         return jsonify({"message": "Item not found"}), 404
 
-@todo_blueprint.route('/todos', methods=['GET'])
+@todo_blueprint.route('/todos', methods=['POST'])
 @login_required
-def get_all_todos():
-    items = todo_dao.get_all_items(current_user.id)
-    return render_template('index.html', todos=items)
+def add_todo():
+    title = request.form['title']
+    is_completed = 'is_completed' in request.form
+    new_item = TodoItem(None, current_user.id, title, is_completed)
+    todo_dao.add_item(new_item)
+    return jsonify({"message": "Todo item created"}), 201
 
 @todo_blueprint.route('/todos/<int:item_id>', methods=['PUT'])
 @login_required
