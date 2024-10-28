@@ -1,8 +1,10 @@
 from dataclasses import dataclass
+from datetime import datetime
+
 
 @dataclass
-class TodoItem:
+class Birthday:
     item_id: int
     user_id: int
-    title: str
-    is_completed: bool
+    name: str
+    date: datetime

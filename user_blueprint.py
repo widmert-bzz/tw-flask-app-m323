@@ -6,9 +6,11 @@ import bcrypt
 user_blueprint = Blueprint('user_blueprint', __name__)
 user_dao = UserDao('todo_example.db')
 
+
 @user_blueprint.route('/login', methods=['GET'])
 def login_page():
     return render_template('login.html')
+
 
 @user_blueprint.route('/login', methods=['POST'])
 def login():
@@ -18,6 +20,7 @@ def login():
         login_user(user)
         return redirect(url_for('todo_blueprint.get_all_todos'))
     return jsonify({'error': 'Invalid username or password'}), 401
+
 
 @user_blueprint.route('/logout', methods=['POST'])
 @login_required

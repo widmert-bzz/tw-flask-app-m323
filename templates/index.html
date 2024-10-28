@@ -6,20 +6,25 @@
     <title>Todo List</title>
 </head>
 <body>
-    <h1>Todo List</h1>
-    <ul>
-        {% for item in todos %}
-            <li>{{ item.title }} - {% if item.is_completed %}Completed{% else %}Not Completed{% endif %}</li>
-        {% endfor %}
-    </ul>
-    <h2>Add Todo</h2>
-    <form action="/todos" method="post">
-        <input type="text" name="title" placeholder="Title" required>
-        <input type="checkbox" name="is_completed"> Completed
-        <button type="submit">Add</button>
-    </form>
-    <form action="/logout" method="post" style="margin-top: 20px;">
-        <button type="submit">Logout</button>
-    </form>
+<h1>Geburtstage</h1>
+<ul>
+    {% for item in todos %}
+    <li>{{ item.name }}</li>
+    <li>{{ item.date }}</li>
+    {% endfor %}
+</ul>
+<h2>Geburtstag hinzufügen</h2>
+<form action="/todos" method="post">
+    <label>
+        <input type="text" name="name" placeholder="Title" required>
+    </label>
+    <label>
+        <input type="date" name="date" required>
+    </label>
+    <button type="submit">Add</button>
+</form>
+<form action="/logout" method="post" style="margin-top: 20px;">
+    <button type="submit">Logout</button>
+</form>
 </body>
 </html>

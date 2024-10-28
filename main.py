@@ -1,7 +1,9 @@
+from datetime import datetime
+
 from flask import Flask
 from flask_login import LoginManager
 
-from todo_blueprint import todo_blueprint
+from birthdays_blueprint import birthdays_blueprint
 from user_blueprint import user_blueprint
 
 app = Flask(__name__)
@@ -10,22 +12,25 @@ app.secret_key = 'supersecretkey'
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+
 @login_manager.user_loader
 def load_user(user_id):
     from user_dao import UserDao
     user_dao = UserDao('todo_example.db')
     return user_dao.get_user_by_id(int(user_id))
 
-app.register_blueprint(todo_blueprint)
+
+app.register_blueprint(birthdays_blueprint)
 app.register_blueprint(user_blueprint)
 
+
 def generate_testdata():
-    from todo_item import TodoItem
+    from birthday import Birthday
     from user import User
-    from todo_dao import TodoDao
+    from birthdays_dao import BirthdaysDao
     from user_dao import UserDao
 
-    todo_dao = TodoDao('todo_example.db')
+    todo_dao = BirthdaysDao('todo_example.db')
     user_dao = UserDao('todo_example.db')
 
     # Generate user
@@ -35,13 +40,14 @@ def generate_testdata():
 
     # Generate todo items
     todo_dao.create_table()
-    todo_dao.add_item(TodoItem(1,1, 'Buy milk', False))
-    todo_dao.add_item(TodoItem(2,1, 'Buy eggs', False))
-    todo_dao.add_item(TodoItem(3,2, 'Buy bread', False))
-    todo_dao.add_item(TodoItem(4,2, 'Buy butter', False))
+    todo_dao.add_item(Birthday(1, 1, "Anna", datetime.now()))
+    todo_dao.add_item(Birthday(2, 1, "Marius", datetime.now()))
+    todo_dao.add_item(Birthday(3, 1, "Fridolin", datetime.now()))
+    todo_dao.add_item(Birthday(4, 1, "Mathilda", datetime.now()))
 
     todo_dao.close()
     user_dao.close()
+
 
 if __name__ == '__main__':
     generate_testdata()

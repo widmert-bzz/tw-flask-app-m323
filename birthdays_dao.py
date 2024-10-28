@@ -1,7 +1,7 @@
 import sqlite3
-from todo_item import TodoItem
+from birthday import Birthday
 
-class TodoDao:
+class BirthdaysDao:
     def __init__(self, db_file):
         self.conn = sqlite3.connect(db_file, check_same_thread=False)
         self.cursor = self.conn.cursor()
@@ -11,34 +11,34 @@ class TodoDao:
         self.cursor.execute(
             '''CREATE TABLE IF NOT EXISTS todo_items (
                 item_id INTEGER PRIMARY KEY,
-                title TEXT,
-                is_completed BOOLEAN,
                 user_id INTEGER,
+                name TEXT,
+                date TEXT,
                 FOREIGN KEY(user_id) REFERENCES users(id))'''
         )
         self.conn.commit()
 
-    def add_item(self, todo_item):
-        self.cursor.execute("INSERT INTO todo_items (user_id, title, is_completed) VALUES (?, ?, ?)",
-                            (todo_item.user_id, todo_item.title, todo_item.is_completed))
+    def add_item(self, birthday_item):
+        self.cursor.execute("INSERT INTO todo_items (user_id, name, date) VALUES (?, ?, ?)",
+                            (birthday_item.user_id, birthday_item.name, birthday_item.date))
         self.conn.commit()
 
     def get_item(self, item_id, user_id):
         self.cursor.execute("SELECT * FROM todo_items WHERE item_id = ? AND user_id = ?", (item_id, user_id))
         row = self.cursor.fetchone()
         if row:
-            return TodoItem(row[0], row[3], row[1], row[2])
+            return Birthday(row[0], row[1], row[2], row[3])
         return None
 
     def get_all_items(self, user_id):
         self.cursor.execute("SELECT * FROM todo_items WHERE user_id = ?", (user_id,))
         rows = self.cursor.fetchall()
-        todo_items = [TodoItem(row[0], row[3], row[1], row[2]) for row in rows]
-        return todo_items
+        birthday_items = [Birthday(row[0], row[1], row[2], row[3]) for row in rows]
+        return birthday_items
 
-    def update_item(self, todo_item):
-        self.cursor.execute("UPDATE todo_items SET title = ?, is_completed = ? WHERE item_id = ?",
-                            (todo_item.title, todo_item.is_completed, todo_item.item_id))
+    def update_item(self, birthday_item):
+        self.cursor.execute("UPDATE todo_items SET name = ?, date = ? WHERE item_id = ? AND user_id = ?",
+                            (birthday_item.name, birthday_item.date, birthday_item.item_id, birthday_item.user_id))
         if self.cursor.rowcount > 0:
             self.conn.commit()
             return True
