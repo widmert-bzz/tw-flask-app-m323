@@ -38,12 +38,12 @@ def generate_testdata():
     user_dao.add_user(User(1, 'admin', 'admin@example', 'admin'))
     user_dao.add_user(User(2, 'user', 'user@example', 'user'))
 
-    # Generate todo items
+    # Generate
     todo_dao.create_table()
-    todo_dao.add_item(Birthday(1, 1, "Anna", datetime.now()))
-    todo_dao.add_item(Birthday(2, 1, "Marius", datetime.now()))
-    todo_dao.add_item(Birthday(3, 1, "Fridolin", datetime.now()))
-    todo_dao.add_item(Birthday(4, 1, "Mathilda", datetime.now()))
+    todo_dao.add_item(Birthday(1, 1, "Anna", datetime(2006, 1, 1)))
+    todo_dao.add_item(Birthday(2, 1, "Marius", datetime(2005, 1, 12)))
+    todo_dao.add_item(Birthday(3, 1, "Fridolin", datetime(2001, 1, 1)))
+    todo_dao.add_item(Birthday(4, 1, "Mathilda", datetime(2002, 12, 1)))
 
     todo_dao.close()
     user_dao.close()
